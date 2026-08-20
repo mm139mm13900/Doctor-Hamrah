@@ -12,3 +12,6 @@
 ## نصب نیازمندی‌ها
 ```bash
 pip install -r requirements.txt
+streamlit
+pandas
+matplotlib

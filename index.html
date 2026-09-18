@@ -4,46 +4,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>دکتر همراه</title>
+    <!-- اضافه کردن یک بخش برای نمایش وضعیت لود شدن -->
+    <style>
+      body { margin: 0; padding: 0; font-family: sans-serif; }
+      #loading { 
+        display: flex; justify-content: center; align-items: center; 
+        height: 100vh; font-size: 24px; color: #555; 
+      }
+    </style>
+    <!-- بارگذاری کتابخانه اصلی -->
     <script src="https://cdn.jsdelivr.net/npm/@stlite/browser@0.49.0/build/stlite.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@0.49.0/build/style.css" />
   </head>
-  <body style="margin:0; padding:0;">
+  <body>
+    <div id="loading">در حال بارگذاری برنامه دکتر همراه... لطفاً صبر کنید...</div>
     <div id="root"></div>
-    <script>
-      // اضافه کردن یک سیستم گزارش خطا برای اینکه بفهمیم مشکل کجاست
-      window.onerror = function(msg, url, lineNo, columnNo, error) {
-        document.getElementById('root').innerHTML = `
-          <div style="color: red; padding: 20px; text-align: center; direction: rtl;">
-            <h2>خطا در اجرای برنامه!</h2>
-            <p>${msg}</p>
-            <p>خط: ${lineNo}</p>
-          </div>`;
-        return false;
-      };
 
-      stlite.mount({
-        requirements: ["streamlit", "pandas", "matplotlib", "numpy"],
-        entrypoint: "app.py",
-        files: {
-          "app.py": `
+    <script>
+      // این تابع چک می‌کند که آیا stlite لود شده یا نه
+      function startApp() {
+        if (typeof stlite !== 'undefined') {
+          // اگر لود شده بود، پیام انتظار را پاک کن و برنامه را اجرا کن
+          document.getElementById('loading').style.display = 'none';
+          
+          stlite.mount({
+            requirements: ["streamlit", "pandas", "matplotlib", "numpy"],
+            entrypoint: "app.py",
+            files: {
+              "app.py": `
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="دکتر همراه", page_icon="🩺")
-
 st.title("🩺 دکتر همراه")
-st.write("سلام تمنا عزیز! برنامه با موفقیت لود شد.")
+st.write("سلام! برنامه با موفقیت لود شد.")
+st.success("همه چیز عالی است!")
 
-# تست نمودار
-st.write("### نمودار تست:")
 chart_data = pd.DataFrame(np.random.randn(20, 1), columns=['قند خون'])
 st.line_chart(chart_data)
-          `
-        },
-      });
+              `
+            },
+          });
+        } else {
+          // اگر هنوز لود نشده، ۵۰۰ میلی‌ثانیه صبر کن و دوباره امتحان کن
+          setTimeout(startApp, 500);
+        }
+      }
+
+      // شروع تلاش برای اجرای برنامه
+      startApp();
     </script>
   </body>
 </html>
-

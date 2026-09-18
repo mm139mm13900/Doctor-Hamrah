@@ -10,6 +10,17 @@
   <body style="margin:0; padding:0;">
     <div id="root"></div>
     <script>
+      // اضافه کردن یک سیستم گزارش خطا برای اینکه بفهمیم مشکل کجاست
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        document.getElementById('root').innerHTML = `
+          <div style="color: red; padding: 20px; text-align: center; direction: rtl;">
+            <h2>خطا در اجرای برنامه!</h2>
+            <p>${msg}</p>
+            <p>خط: ${lineNo}</p>
+          </div>`;
+        return false;
+      };
+
       stlite.mount({
         requirements: ["streamlit", "pandas", "matplotlib", "numpy"],
         entrypoint: "app.py",
@@ -23,21 +34,16 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="دکتر همراه", page_icon="🩺")
 
 st.title("🩺 دکتر همراه")
-st.subheader("مدیریت هوشمند دیابت برای تمنا")
+st.write("سلام تمنا عزیز! برنامه با موفقیت لود شد.")
 
-st.info("سلام! برنامه با موفقیت لود شد. حالا کدهای اصلی خودت را جایگزین کن.")
-
-# یک بخش تست برای اینکه مطمئن شویم همه چیز درست است
-st.write("---")
-st.write("### تست نمودار قند خون:")
+# تست نمودار
+st.write("### نمودار تست:")
 chart_data = pd.DataFrame(np.random.randn(20, 1), columns=['قند خون'])
 st.line_chart(chart_data)
-
-st.write("---")
-st.write("آماده دریافت کدهای اصلی شما...")
           `
         },
       });
     </script>
   </body>
 </html>
+

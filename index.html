@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>دکتر همراه</title>
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/browser@0.49.0/build/stlite.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@0.49.0/build/style.css" />
+  </head>
+  <body style="margin:0; padding:0;">
+    <div id="root"></div>
+    <script>
+      stlite.mount({
+        requirements: ["streamlit", "pandas", "matplotlib", "numpy"],
+        entrypoint: "app.py",
+        files: {
+          "app.py": `
+import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+st.set_page_config(page_title="دکتر همراه", page_icon="🩺")
+
+st.title("🩺 دکتر همراه")
+st.subheader("مدیریت هوشمند دیابت برای تمنا")
+
+st.info("سلام! برنامه با موفقیت لود شد. حالا کدهای اصلی خودت را جایگزین کن.")
+
+# یک بخش تست برای اینکه مطمئن شویم همه چیز درست است
+st.write("---")
+st.write("### تست نمودار قند خون:")
+chart_data = pd.DataFrame(np.random.randn(20, 1), columns=['قند خون'])
+st.line_chart(chart_data)
+
+st.write("---")
+st.write("آماده دریافت کدهای اصلی شما...")
+          `
+        },
+      });
+    </script>
+  </body>
+</html>
